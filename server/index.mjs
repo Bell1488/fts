@@ -1,0 +1,79 @@
+import http from 'node:http';
+import { request } from 'undici';
+import { SocksProxyAgent } from 'socks-proxy-agent';
+
+const port = Number(process.env.PORT || 8787);
+const botToken = process.env.TELEGRAM_BOT_TOKEN;
+const chatId = process.env.TELEGRAM_CHAT_ID;
+const proxyUrl = process.env.SOCKS5H_URL;
+const ratesCache = { value: null, fetchedAt: 0 };
+
+function json(response, status, body) {
+  response.writeHead(status, { 'content-type': 'application/json; charset=utf-8' });
+  response.end(JSON.stringify(body));
+}
+
+function formatMessage(data) {
+  return [
+    '<b>Новая заявка с сайта</b>',
+    '',
+    `<b>Имя:</b> ${escapeHtml(data.name)}`,
+    `<b>Компания:</b> ${escapeHtml(data.company || 'Не указана')}`,
+    `<b>Контакт:</b> ${escapeHtml(data.contact)}`,
+    `<b>Сумма и направление:</b> ${escapeHtml(data.details || 'Не указаны')}`,
+  ].join('\n');
+}
+
+function escapeHtml(value) {
+  return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+}
+
+async function getExchangeRate() {
+  const day = 24 * 60 * 60 * 1000;
+  if (ratesCache.value && Date.now() - ratesCache.fetchedAt < day) return ratesCache.value;
+  const agent = proxyUrl ? new SocksProxyAgent(proxyUrl) : undefined;
+  const response = await request('https://www.cbr.ru/scripts/XML_daily.asp', { dispatcher: agent });
+  const xml = await response.body.text();
+  const match = xml.match(/<Valute[^>]*>\s*<NumCode>156<\/NumCode>[\s\S]*?<Nominal>(\d+)<\/Nominal>[\s\S]*?<Value>([\d,]+)<\/Value>/);
+  if (!match) throw new Error('CNY rate not found in CBR response');
+  const rate = Number(match[2].replace(',', '.')) / Number(match[1]);
+  ratesCache.value = { cbrRate: rate, buyRate: rate * 1.03, sellRate: rate * 0.97, fetchedAt: new Date().toISOString() };
+  ratesCache.fetchedAt = Date.now();
+  return ratesCache.value;
+}
+
+async function sendToTelegram(data) {
+  if (!botToken || !chatId) throw new Error('Telegram is not configured');
+  const agent = proxyUrl ? new SocksProxyAgent(proxyUrl) : undefined;
+  const result = await request(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    method: 'POST',
+    dispatcher: agent,
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ chat_id: chatId, text: formatMessage(data), parse_mode: 'HTML' }),
+  });
+  if (result.statusCode < 200 || result.statusCode >= 300) {
+    throw new Error(`Telegram returned ${result.statusCode}`);
+  }
+}
+
+const server = http.createServer(async (req, res) => {
+  if (req.method === 'GET' && req.url === '/api/health') return json(res, 200, { ok: true });
+  if (req.method === 'GET' && req.url === '/api/rates') {
+    try { return json(res, 200, await getExchangeRate()); } catch (error) { console.error(error); return json(res, 502, { error: 'Не удалось получить курс ЦБ РФ' }); }
+  }
+  if (req.method !== 'POST' || req.url !== '/api/lead') return json(res, 404, { error: 'Not found' });
+
+  let raw = '';
+  for await (const chunk of req) raw += chunk;
+  try {
+    const data = JSON.parse(raw);
+    if (!data.name || !data.contact) return json(res, 400, { error: 'Имя и контакт обязательны' });
+    await sendToTelegram(data);
+    return json(res, 200, { ok: true });
+  } catch (error) {
+    console.error(error);
+    return json(res, 500, { error: 'Не удалось отправить заявку. Напишите менеджеру в Telegram.' });
+  }
+});
+
+server.listen(port, () => console.log(`Lead API listening on http://localhost:${port}`));
