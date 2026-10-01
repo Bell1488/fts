@@ -32,7 +32,7 @@ async function getExchangeRate() {
   const day = 24 * 60 * 60 * 1000;
   if (ratesCache.value && Date.now() - ratesCache.fetchedAt < day) return ratesCache.value;
   const agent = proxyUrl ? new SocksProxyAgent(proxyUrl) : undefined;
-  const response = await request('https://www.cbr.ru/scripts/XML_daily.asp', { dispatcher: agent });
+  const response = await request('https://www.cbr.ru/scripts/XML_daily.asp', { dispatcher: agent, headers: { 'user-agent': 'FTS-Pay/1.0' } });
   const xml = await response.body.text();
   const match = xml.match(/<Valute[^>]*>\s*<NumCode>156<\/NumCode>[\s\S]*?<Nominal>(\d+)<\/Nominal>[\s\S]*?<Value>([\d,]+)<\/Value>/);
   if (!match) throw new Error('CNY rate not found in CBR response');
