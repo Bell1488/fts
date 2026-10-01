@@ -7,6 +7,7 @@ const botToken = process.env.TELEGRAM_BOT_TOKEN;
 const chatId = process.env.TELEGRAM_CHAT_ID;
 const proxyUrl = process.env.SOCKS5H_URL;
 const ratesCache = { value: null, fetchedAt: 0 };
+let botOffset = 0;
 
 function json(response, status, body) {
   response.writeHead(status, { 'content-type': 'application/json; charset=utf-8' });
@@ -28,9 +29,9 @@ function escapeHtml(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 
-async function getExchangeRate() {
+async function getExchangeRate(force = false) {
   const day = 24 * 60 * 60 * 1000;
-  if (ratesCache.value && Date.now() - ratesCache.fetchedAt < day) return ratesCache.value;
+  if (!force && ratesCache.value && Date.now() - ratesCache.fetchedAt < day) return ratesCache.value;
   const agent = proxyUrl ? new SocksProxyAgent(proxyUrl) : undefined;
   const response = await axios.get('https://www.cbr.ru/scripts/XML_daily.asp', { httpAgent: agent, httpsAgent: agent, proxy: false, headers: { 'user-agent': 'FTS-Pay/1.0' }, responseType: 'text' });
   const xml = response.data;
@@ -46,6 +47,29 @@ async function sendToTelegram(data) {
   if (!botToken || !chatId) throw new Error('Telegram is not configured');
   const agent = proxyUrl ? new SocksProxyAgent(proxyUrl) : undefined;
   await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, { chat_id: chatId, text: formatMessage(data), parse_mode: 'HTML' }, { httpAgent: agent, httpsAgent: agent, proxy: false });
+}
+
+async function sendBotMessage(text) {
+  if (!botToken || !chatId) return;
+  const agent = proxyUrl ? new SocksProxyAgent(proxyUrl) : undefined;
+  await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, { chat_id: chatId, text }, { httpAgent: agent, httpsAgent: agent, proxy: false });
+}
+
+async function pollBot() {
+  if (!botToken) return;
+  try {
+    const agent = proxyUrl ? new SocksProxyAgent(proxyUrl) : undefined;
+    const response = await axios.get(`https://api.telegram.org/bot${botToken}/getUpdates`, { params: { offset: botOffset, timeout: 0 }, httpAgent: agent, httpsAgent: agent, proxy: false });
+    for (const update of response.data.result || []) {
+      botOffset = update.update_id + 1;
+      const message = update.message;
+      if (!message || String(message.chat.id) !== String(chatId)) continue;
+      if (['/rate', '/rates', '/курс'].includes(message.text)) {
+        const rates = await getExchangeRate(true);
+        await sendBotMessage(`Курс ЦБ РФ: ${rates.cbrRate.toFixed(4)} ₽ за ¥\nПокупка юаней: ${rates.buyRate.toFixed(4)} ₽\nПродажа юаней: ${rates.sellRate.toFixed(4)} ₽\nОбновлено: ${rates.fetchedAt}`);
+      }
+    }
+  } catch (error) { console.error('Telegram polling error:', error.message); }
 }
 
 const server = http.createServer(async (req, res) => {
@@ -68,4 +92,4 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(port, () => console.log(`Lead API listening on http://localhost:${port}`));
+server.listen(port, () => { console.log(`Lead API listening on http://localhost:${port}`); setInterval(pollBot, 5000); pollBot(); });

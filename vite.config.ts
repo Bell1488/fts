@@ -14,4 +14,5 @@ export default defineConfig({
     exclude: ['lucide-react'],
   },
   server: { proxy: { '/api': 'http://localhost:8787' } },
+  publicDir: 'public',
 });
