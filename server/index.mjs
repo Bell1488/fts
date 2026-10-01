@@ -1,5 +1,5 @@
 import http from 'node:http';
-import { request } from 'undici';
+import axios from 'axios';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 
 const port = Number(process.env.PORT || 8787);
@@ -32,8 +32,8 @@ async function getExchangeRate() {
   const day = 24 * 60 * 60 * 1000;
   if (ratesCache.value && Date.now() - ratesCache.fetchedAt < day) return ratesCache.value;
   const agent = proxyUrl ? new SocksProxyAgent(proxyUrl) : undefined;
-  const response = await request('https://www.cbr.ru/scripts/XML_daily.asp', { dispatcher: agent, headers: { 'user-agent': 'FTS-Pay/1.0' } });
-  const xml = await response.body.text();
+  const response = await axios.get('https://www.cbr.ru/scripts/XML_daily.asp', { httpAgent: agent, httpsAgent: agent, proxy: false, headers: { 'user-agent': 'FTS-Pay/1.0' }, responseType: 'text' });
+  const xml = response.data;
   const match = xml.match(/<Valute[^>]*>\s*<NumCode>156<\/NumCode>[\s\S]*?<Nominal>(\d+)<\/Nominal>[\s\S]*?<Value>([\d,]+)<\/Value>/);
   if (!match) throw new Error('CNY rate not found in CBR response');
   const rate = Number(match[2].replace(',', '.')) / Number(match[1]);
@@ -45,15 +45,7 @@ async function getExchangeRate() {
 async function sendToTelegram(data) {
   if (!botToken || !chatId) throw new Error('Telegram is not configured');
   const agent = proxyUrl ? new SocksProxyAgent(proxyUrl) : undefined;
-  const result = await request(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-    method: 'POST',
-    dispatcher: agent,
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ chat_id: chatId, text: formatMessage(data), parse_mode: 'HTML' }),
-  });
-  if (result.statusCode < 200 || result.statusCode >= 300) {
-    throw new Error(`Telegram returned ${result.statusCode}`);
-  }
+  await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, { chat_id: chatId, text: formatMessage(data), parse_mode: 'HTML' }, { httpAgent: agent, httpsAgent: agent, proxy: false });
 }
 
 const server = http.createServer(async (req, res) => {
