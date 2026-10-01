@@ -6,6 +6,7 @@ const port = Number(process.env.PORT || 8787);
 const botToken = process.env.TELEGRAM_BOT_TOKEN;
 const chatId = process.env.TELEGRAM_CHAT_ID;
 const proxyUrl = process.env.SOCKS5H_URL;
+console.log('FTS-Pay config:', { port, hasBotToken: Boolean(botToken), hasChatId: Boolean(chatId), hasProxy: Boolean(proxyUrl) });
 const ratesCache = { value: null, fetchedAt: 0 };
 let botOffset = 0;
 
