@@ -72,7 +72,7 @@ export const SERVICES: Service[] = [
       'Пополнение баланса Alipay',
       'Моментальное зачисление',
       'Для покупок на 1688, Taobao, Tmall',
-      'Пополнение от 100 юаней',
+      'Минимальная сумма — 2 500 юаней',
     ],
     icon: 'Wallet',
   },
@@ -86,7 +86,7 @@ export const SERVICES: Service[] = [
       'Пополнение баланса WeChat Pay',
       'Быстрое зачисление',
       'Для платежей в Китае и партнёрам',
-      'Пополнение от 100 юаней',
+      'Минимальная сумма — 2 500 юаней',
     ],
     icon: 'MessageCircle',
   },
@@ -204,8 +204,8 @@ export const EXCHANGE_DIRECTIONS: ExchangeDirection[] = [
   { id: 'rub-cny', from: 'RUB', to: 'CNY', rate: 11.68, commission: 1.5, minAmount: 2500, icon: 'ArrowLeftRight' },
   { id: 'cny-rub', from: 'CNY', to: 'RUB', rate: 0.083, commission: 1.5, minAmount: 2500, icon: 'ArrowLeftRight' },
   { id: 'usdt-cny', from: 'USDT', to: 'CNY', rate: 7.15, commission: 2.0, minAmount: 2500, icon: 'Bitcoin' },
-  { id: 'rub-alipay', from: 'RUB', to: 'Alipay CNY', rate: 11.68, commission: 1.5, minAmount: 100, icon: 'Wallet' },
-  { id: 'rub-wechat', from: 'RUB', to: 'WeChat CNY', rate: 11.68, commission: 1.5, minAmount: 100, icon: 'MessageCircle' },
+  { id: 'rub-alipay', from: 'RUB', to: 'Alipay CNY', rate: 11.68, commission: 1.5, minAmount: 2500, icon: 'Wallet' },
+  { id: 'rub-wechat', from: 'RUB', to: 'WeChat CNY', rate: 11.68, commission: 1.5, minAmount: 2500, icon: 'MessageCircle' },
 ];
 
 export interface Review {
@@ -402,7 +402,7 @@ export interface FAQItem {
 export const FAQ_ITEMS: FAQItem[] = [
   {
     question: 'Какова минимальная сумма для работы?',
-    answer: 'Минимальная сумма для работы по всем направлениям составляет 2 500 юаней. Для пополнения Alipay и WeChat Pay — от 100 юаней.',
+    answer: 'Минимальная сумма для работы по всем направлениям составляет 2 500 юаней, включая пополнение Alipay и WeChat Pay.',
   },
   {
     question: 'Какой курс обмена вы предлагаете?',

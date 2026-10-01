@@ -79,7 +79,7 @@ export default function CalculatorPage() {
   const toSymbol = direction.to.includes('CNY') ? '¥' : direction.to === 'RUB' ? '₽' : '$';
   const toLabel = direction.to.includes('Alipay') ? 'Alipay' : direction.to.includes('WeChat') ? 'WeChat' : direction.to;
 
-  const meetsMinimum = amountNum >= direction.minAmount || (direction.id === 'rub-alipay' || direction.id === 'rub-wechat');
+  const meetsMinimum = amountNum >= direction.minAmount;
 
   const handleCalculate = () => {
     if (amountNum > 0) {
@@ -223,7 +223,7 @@ export default function CalculatorPage() {
                   <div className="flex items-start gap-2 p-3 rounded-xl bg-brand-50/50 border border-brand-100/50">
                     <Info className="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" />
                     <p className="text-xs text-gray-600 leading-relaxed">
-                      Расчёт предварительный. Курс фиксируется менеджером на момент заявки в Telegram. Минимальная сумма — {COMPANY.minSum} {COMPANY.minSumCurrency} (для Alipay/WeChat от 100 ¥).
+                      Расчёт предварительный. Курс фиксируется менеджером на момент заявки в Telegram. Минимальная сумма — {COMPANY.minSum} {COMPANY.minSumCurrency} для всех направлений.
                     </p>
                   </div>
                 </div>
@@ -390,7 +390,7 @@ export default function CalculatorPage() {
               <AlertCircle className="w-8 h-8 text-brand-500 mb-4" />
               <h3 className="font-display font-bold text-lg text-gray-900 mb-3">Минимальная сумма</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
-                Минимальная сумма для обмена — {COMPANY.minSum} {COMPANY.minSumCurrency}. Для пополнения Alipay и WeChat Pay — от 100 ¥.
+                Минимальная сумма для всех направлений — {COMPANY.minSum} {COMPANY.minSumCurrency}.
               </p>
             </div>
           </div>

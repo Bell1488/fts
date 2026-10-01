@@ -146,7 +146,7 @@ export default function ContactsPage() {
                     </div>
                     <div>
                       <div className="text-sm text-gray-500 font-medium">Минимальная сумма</div>
-                      <div className="text-gray-900 font-semibold">{COMPANY.minSum} {COMPANY.minSumCurrency} (Alipay/WeChat от 100 ¥)</div>
+                      <div className="text-gray-900 font-semibold">{COMPANY.minSum} {COMPANY.minSumCurrency} для всех направлений</div>
                     </div>
                   </div>
                 </div>
