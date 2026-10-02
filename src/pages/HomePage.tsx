@@ -96,13 +96,13 @@ export default function HomePage() {
     <div className="pt-20">
       {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        <picture className="absolute inset-0 -z-0">
+        <picture className="absolute inset-0 z-0 block">
           <source media="(max-width: 767px)" srcSet="/assets/hero-moile-back.png" />
           <img src="/assets/hero-back.png" alt="" className="h-full w-full object-cover object-center" />
         </picture>
-        <div className="absolute inset-0 bg-white/70" />
-        <div className="absolute inset-0 hero-mesh" />
-        <div className="absolute inset-0 grid-pattern" />
+        <div className="absolute inset-0 z-0 bg-white/70" />
+        <div className="absolute inset-0 z-0 hero-mesh" />
+        <div className="absolute inset-0 z-0 grid-pattern" />
         <div className="bg-blob w-[400px] h-[400px] bg-brand-300/20 top-20 right-0" />
         <div className="bg-blob w-[300px] h-[300px] bg-brand-400/10 bottom-0 left-0" />
 
