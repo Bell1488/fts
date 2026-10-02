@@ -25,6 +25,7 @@ export default function ContactsPage() {
       formElement.reset();
       setFormStatus('success');
       trackMetrikaGoal('lead_form_success');
+      openManagerTelegram();
     } catch {
       setFormStatus('error');
     }
