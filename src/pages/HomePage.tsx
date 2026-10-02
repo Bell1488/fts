@@ -73,7 +73,15 @@ function FAQItem({ item, isOpen, onToggle }: {
 export default function HomePage() {
   const [statsStart, setStatsStart] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [liveRates, setLiveRates] = useState<{ buyRate: number; sellRate: number } | null>(null);
   const statsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch('/api/rates')
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then(setLiveRates)
+      .catch(() => setLiveRates(null));
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -156,8 +164,9 @@ export default function HomePage() {
                     <div>
                       <div className="text-sm text-gray-500">Курс обмена</div>
                       <div className="text-3xl font-display font-extrabold text-brand-600">
-                        1 ¥ = {COMPANY.rate} ₽
+                        {liveRates ? `1 \u00A5 = ${formatNumber(liveRates.buyRate, 4)} \u20BD` : '\u041A\u0443\u0440\u0441 \u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E \u043D\u0435\u0434\u043E\u0441\u0442\u0443\u043F\u0435\u043D'}
                       </div>
+                      {liveRates && <div className="text-xs text-gray-500 mt-1">Продажа: {formatNumber(liveRates.sellRate, 4)} ₽ за ¥</div>}
                     </div>
                     <div className="w-14 h-14 rounded-2xl gradient-orange flex items-center justify-center shadow-lg shadow-brand-500/20">
                       <ArrowLeftRight className="w-7 h-7 text-white" />
@@ -173,7 +182,7 @@ export default function HomePage() {
                           <span className="font-bold text-gray-900 text-sm">{dir.to}</span>
                         </div>
                         <div className="text-sm font-semibold text-brand-600">
-                          {dir.rate} {dir.to.includes('CNY') ? '¥' : '₽'}
+                          {formatNumber(liveRates && ['rub-cny', 'cny-rub', 'rub-alipay', 'rub-wechat'].includes(dir.id) ? (dir.from === 'RUB' ? liveRates.buyRate : liveRates.sellRate) : dir.rate, 4)} {dir.to.includes('CNY') ? '¥' : '₽'}
                         </div>
                       </div>
                     ))}
