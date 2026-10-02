@@ -68,6 +68,7 @@ export default function Navbar() {
               <Send className="w-4 h-4 text-brand-500" />
               Написать менеджеру
             </button>
+            <Link to="/contacts#lead-form" className="btn-glass text-sm py-2.5 px-4">Оставить заявку</Link>
             <Link to="/calculator" className="btn-primary text-sm py-2.5 px-5">
               Сделать расчёт
             </Link>
@@ -106,6 +107,7 @@ export default function Navbar() {
                   <Send className="w-4 h-4 text-brand-500" />
                   Написать менеджеру
                 </button>
+                <Link to="/contacts#lead-form" className="btn-glass w-full">Оставить заявку</Link>
                 <Link to="/calculator" className="btn-primary w-full">
                   Сделать расчёт
                 </Link>

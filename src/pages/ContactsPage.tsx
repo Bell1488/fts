@@ -201,7 +201,7 @@ export default function ContactsPage() {
               </div>
             </div>
 
-            <div className="glass-card p-8">
+            <div id="lead-form" className="glass-card p-8 scroll-mt-28">
               <h2 className="font-display font-bold text-2xl text-gray-900 mb-2">Оставить заявку</h2>
               <p className="text-gray-600 text-sm mb-6">
                 Заполните форму — мы свяжемся с вами в Telegram. Но быстрее — написать напрямую.
