@@ -1,13 +1,35 @@
+import { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Send, Star, Calculator, Mail, Phone, MapPin, Clock, MessageCircle,
   ArrowRight, Building2, User, FileText, Zap,
 } from 'lucide-react';
 import { COMPANY } from '@/data/content';
-import { openManagerTelegram, openChannelTelegram } from '@/lib/utils';
+import { openManagerTelegram, openChannelTelegram, trackMetrikaGoal } from '@/lib/utils';
 import CTASection from '@/components/CTASection';
 
 export default function ContactsPage() {
+  const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+
+  async function handleLeadSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formElement = event.currentTarget;
+    setFormStatus('sending');
+    try {
+      const response = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(formElement).entries())),
+      });
+      if (!response.ok) throw new Error('Lead submission failed');
+      formElement.reset();
+      setFormStatus('success');
+      trackMetrikaGoal('lead_form_success');
+    } catch {
+      setFormStatus('error');
+    }
+  }
+
   return (
     <div className="pt-20">
       {/* Hero */}
@@ -185,10 +207,7 @@ export default function ContactsPage() {
               </p>
 
               <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  openManagerTelegram();
-                }}
+                onSubmit={handleLeadSubmit}
                 className="space-y-5"
               >
                 <div>
@@ -197,6 +216,7 @@ export default function ContactsPage() {
                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
                       type="text"
+                      name="name"
                       required
                       placeholder="Иван Иванов"
                       className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white/70 border border-brand-100 focus:border-brand-400 focus:ring-2 focus:ring-brand-300/50 outline-none transition-all text-gray-900 placeholder:text-gray-400"
@@ -210,6 +230,7 @@ export default function ContactsPage() {
                     <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
                       type="text"
+                      name="company"
                       placeholder="ООО «Ваша компания»"
                       className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white/70 border border-brand-100 focus:border-brand-400 focus:ring-2 focus:ring-brand-300/50 outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     />
@@ -222,6 +243,7 @@ export default function ContactsPage() {
                     <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
                       type="text"
+                      name="contact"
                       required
                       placeholder="@username или +7..."
                       className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white/70 border border-brand-100 focus:border-brand-400 focus:ring-2 focus:ring-brand-300/50 outline-none transition-all text-gray-900 placeholder:text-gray-400"
@@ -232,20 +254,22 @@ export default function ContactsPage() {
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Сумма и направление</label>
                   <textarea
+                    name="details"
                     rows={4}
                     placeholder="Например: 100 000 ₽ → юани, оплата поставщику на Alipay"
                     className="w-full px-4 py-3.5 rounded-xl bg-white/70 border border-brand-100 focus:border-brand-400 focus:ring-2 focus:ring-brand-300/50 outline-none transition-all text-gray-900 placeholder:text-gray-400 resize-none"
                   />
                 </div>
 
-                <button type="submit" className="btn-primary w-full">
+                                <button type="submit" disabled={formStatus === 'sending'} className="btn-primary w-full disabled:opacity-60 disabled:cursor-wait">
                   <Send className="w-5 h-5" />
-                  Отправить и перейти в Telegram
+                  {formStatus === 'sending' ? 'Отправка...' : 'Отправить заявку'}
                 </button>
 
-                <p className="text-xs text-gray-500 text-center">
-                  Нажимая кнопку, вы перейдёте в чат с менеджером в Telegram.
-                </p>
+                {formStatus === 'success' && <p role="status" className="text-sm text-emerald-700 text-center">Заявка отправлена. Мы свяжемся с вами.</p>}
+                {formStatus === 'error' && <p role="alert" className="text-sm text-red-700 text-center">Не удалось отправить заявку. Напишите менеджеру в Telegram.</p>}
+
+                <p className="text-xs text-gray-500 text-center">Заявка будет отправлена менеджеру в Telegram.</p>
               </form>
             </div>
           </div>

@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -10,10 +11,21 @@ import AboutPage from '@/pages/AboutPage';
 import ReviewsPage from '@/pages/ReviewsPage';
 import ContactsPage from '@/pages/ContactsPage';
 
+function MetrikaPageViews() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.ym?.(113278379, 'hit', `${window.location.origin}${location.pathname}${location.search}`, { title: document.title });
+  }, [location.pathname, location.search]);
+
+  return null;
+}
+
 function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <MetrikaPageViews />
       <div className="min-h-screen flex flex-col bg-white">
         <Navbar />
         <main className="flex-1">
