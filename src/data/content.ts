@@ -21,13 +21,14 @@ export const COMPANY = {
   capital: '200 000 руб.',
   taxSystem: 'УСН',
   workHours: 'Ежедневно, круглосуточно',
-  minSum: 2500,
+  minSum: 500,
   minSumCurrency: 'юаней',
   commission: 1.5,
 };
 
 export const PAYMENT_TERMS = {
-  minimumCny: 2500,
+  minimumCny: 500,
+  minimumRub: 5000,
   commissionPercent: 1.5,
   commissionModel: 'added' as const,
   indicativeRange: '30 000–100 000 ₽',
@@ -210,11 +211,11 @@ export interface ExchangeDirection {
 }
 
 export const EXCHANGE_DIRECTIONS: ExchangeDirection[] = [
-  { id: 'rub-cny', from: 'RUB', to: 'CNY', rate: 0, commission: 1.5, minimumCny: 2500, icon: 'ArrowLeftRight' },
-  { id: 'cny-rub', from: 'CNY', to: 'RUB', rate: 0, commission: 1.5, minimumCny: 2500, icon: 'ArrowLeftRight' },
-  { id: 'usdt-cny', from: 'USDT', to: 'CNY', rate: 0, commission: 2.0, minimumCny: 2500, icon: 'Bitcoin' },
-  { id: 'rub-alipay', from: 'RUB', to: 'Alipay CNY', rate: 0, commission: 1.5, minimumCny: 2500, icon: 'Wallet' },
-  { id: 'rub-wechat', from: 'RUB', to: 'WeChat CNY', rate: 0, commission: 1.5, minimumCny: 2500, icon: 'MessageCircle' },
+  { id: 'rub-cny', from: 'RUB', to: 'CNY', rate: 0, commission: 1.5, minimumCny: 500, icon: 'ArrowLeftRight' },
+  { id: 'cny-rub', from: 'CNY', to: 'RUB', rate: 0, commission: 1.5, minimumCny: 500, icon: 'ArrowLeftRight' },
+  { id: 'usdt-cny', from: 'USDT', to: 'CNY', rate: 0, commission: 2.0, minimumCny: 500, icon: 'Bitcoin' },
+  { id: 'rub-alipay', from: 'RUB', to: 'Alipay CNY', rate: 0, commission: 1.5, minimumCny: 500, icon: 'Wallet' },
+  { id: 'rub-wechat', from: 'RUB', to: 'WeChat CNY', rate: 0, commission: 1.5, minimumCny: 500, icon: 'MessageCircle' },
 ];
 
 export interface Review {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Receipt, Wallet, MessageCircle, FileText, ArrowLeftRight, CreditCard,
-  Bitcoin, ShoppingCart, Users, ArrowRight, CheckCircle2, Send, Star,
+  Bitcoin, ShoppingCart, Users, ArrowRight, CheckCircle2, Send,
   Calculator,
 } from 'lucide-react';
 import { SERVICES, EXCHANGE_DIRECTIONS } from '@/data/content';
@@ -42,9 +42,9 @@ export default function ServicesPage() {
               <Send className="w-5 h-5" />
               Написать менеджеру
             </button>
-            <button onClick={openChannelTelegram} className="btn-glass">
-              <Star className="w-5 h-5 text-brand-500" />
-              Наши отзывы
+            <button onClick={openChannelTelegram} className="btn-telegram">
+              <Send className="w-5 h-5" />
+              Чат клиентов
             </button>
             <Link to="/calculator" className="btn-glass">
               <Calculator className="w-5 h-5 text-brand-500" />

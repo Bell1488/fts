@@ -47,6 +47,12 @@
            hover:-translate-y-0.5 active:translate-y-0
            inline-flex items-center justify-center gap-2;
   }
+  .btn-telegram {
+    @apply bg-[#229ED9] text-white font-semibold px-6 py-3.5 rounded-xl
+           shadow-lg shadow-sky-500/25 transition-all duration-300
+           hover:bg-[#168AC0] hover:shadow-xl hover:shadow-sky-500/35 hover:-translate-y-0.5
+           active:translate-y-0 inline-flex items-center justify-center gap-3;
+  }
 }
 
 .glow-orange {

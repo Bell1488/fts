@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Send, Mail, Phone, MapPin, Clock, MessageCircle } from 'lucide-react';
-import { COMPANY, SERVICES } from '@/data/content';
+import { COMPANY, PAYMENT_TERMS, SERVICES } from '@/data/content';
 import { openManagerTelegram, openChannelTelegram } from '@/lib/utils';
 
 export default function Footer() {
@@ -100,7 +100,7 @@ export default function Footer() {
             © {new Date().getFullYear()} {COMPANY.fullName}. Все права защищены.
           </p>
           <p className="text-gray-500 text-sm">
-            Минимальная сумма для работы: <span className="text-brand-400 font-semibold">{COMPANY.minSum} {COMPANY.minSumCurrency}</span>
+            Минимальная сумма для работы: <span className="text-brand-400 font-semibold">{COMPANY.minSum} {COMPANY.minSumCurrency} / {PAYMENT_TERMS.minimumRub.toLocaleString('ru-RU')} ₽</span>
           </p>
         </div>
       </div>

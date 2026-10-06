@@ -1,4 +1,4 @@
-import { Send, Star, Calculator, ArrowRight } from 'lucide-react';
+import { Send, Calculator, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { openManagerTelegram, openChannelTelegram } from '@/lib/utils';
 
@@ -37,10 +37,10 @@ export default function CTASection({
             </button>
             <button
               onClick={openChannelTelegram}
-              className={`btn-glass w-full sm:w-auto ${isDark ? '!bg-white/10 !text-white !border-white/20 hover:!bg-white/20' : ''}`}
+              className="btn-telegram w-full sm:w-auto"
             >
-              <Star className="w-5 h-5 text-brand-500" />
-              Наши отзывы
+              <Send className="w-5 h-5" />
+              Чат клиентов
             </button>
             <Link
               to="/calculator"
