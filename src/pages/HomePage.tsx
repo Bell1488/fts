@@ -131,26 +131,28 @@ export default function HomePage() {
                 Оплата поставщикам по инвойсу, пополнение Alipay и WeChat Pay, обмен рублей на юани. Переводим за час, работаем 24/7.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                <button onClick={openManagerTelegram} className="btn-primary text-base px-8 py-4">
-                  <Send className="w-5 h-5" />
-                  Написать менеджеру
-                </button>
+              <div className="flex flex-col gap-4 mb-10">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button onClick={openManagerTelegram} className="btn-primary text-base px-6 py-4 flex-1 min-w-0">
+                    <Send className="w-5 h-5 flex-shrink-0" />
+                    <span>Написать менеджеру</span>
+                  </button>
+                  <button onClick={openChannelTelegram} className="btn-glass text-base px-6 py-4 flex-1 min-w-0">
+                    <Star className="w-5 h-5 text-brand-500 flex-shrink-0" />
+                    <span>Наши отзывы</span>
+                  </button>
+                  <Link to="/calculator" className="btn-glass text-base px-6 py-4 flex-1 min-w-0">
+                    <Calculator className="w-5 h-5 text-brand-500 flex-shrink-0" />
+                    <span>Сделать расчёт</span>
+                  </Link>
+                </div>
                 <button
                   onClick={openClientChatTelegram}
-                  className="btn-glass text-base px-8 py-4 border-brand-300/70 bg-brand-50/80 text-brand-800 hover:border-brand-500 hover:bg-brand-100"
+                  className="btn-glass text-base px-6 py-4 w-full sm:w-auto self-start border-brand-300/70 bg-brand-50/80 text-brand-800 hover:border-brand-500 hover:bg-brand-100"
                 >
-                  <MessageCircle className="w-5 h-5 text-brand-600" />
-                  Чат клиентов: живые отзывы и чеки выплат
+                  <MessageCircle className="w-5 h-5 text-brand-600 flex-shrink-0" />
+                  <span>Чат клиентов: живые отзывы и чеки выплат</span>
                 </button>
-                <button onClick={openChannelTelegram} className="btn-glass text-base px-8 py-4">
-                  <Star className="w-5 h-5 text-brand-500" />
-                  Наши отзывы
-                </button>
-                <Link to="/calculator" className="btn-glass text-base px-8 py-4">
-                  <Calculator className="w-5 h-5 text-brand-500" />
-                  Сделать расчёт
-                </Link>
               </div>
 
               <div className="flex flex-wrap gap-x-6 gap-y-3">
