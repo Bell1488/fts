@@ -4,9 +4,20 @@ export function trackMetrikaGoal(goal: string) {
   window.ym?.(113278379, 'reachGoal', goal);
 }
 
-export function openManagerTelegram() {
+export function openManagerTelegram(message?: unknown) {
   trackMetrikaGoal('telegram_manager_click');
-  window.open(import.meta.env.VITE_MANAGER_TELEGRAM_URL || COMPANY.managerTelegram, '_blank', 'noopener,noreferrer');
+  const managerUrl = import.meta.env.VITE_MANAGER_TELEGRAM_URL || COMPANY.managerTelegram;
+  if (typeof message !== 'string' || !message) {
+    window.open(managerUrl, '_blank', 'noopener,noreferrer');
+    return;
+  }
+  try {
+    const url = new URL(managerUrl);
+    url.searchParams.set('text', message);
+    window.open(url.toString(), '_blank', 'noopener,noreferrer');
+  } catch {
+    window.open(managerUrl, '_blank', 'noopener,noreferrer');
+  }
 }
 
 export function openChannelTelegram() {
