@@ -85,9 +85,9 @@ export default function ServicesPage() {
                     <span className="font-display font-bold text-xl text-gray-900">{dir.to}</span>
                   </div>
                   <div className="text-3xl font-display font-extrabold text-brand-600 mb-1">
-                    {dir.rate}
+                    Уточняется
                   </div>
-                  <div className="text-sm text-gray-500 mb-3">курс обмена</div>
+                  <div className="text-sm text-gray-500 mb-3">актуальный курс — у менеджера</div>
                   <div className="pt-3 border-t border-brand-100/50">
                     <div className="text-xs text-gray-500">комиссия {dir.commission}%</div>
                   </div>

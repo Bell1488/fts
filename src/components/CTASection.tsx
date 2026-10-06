@@ -5,7 +5,7 @@ import { openManagerTelegram, openChannelTelegram } from '@/lib/utils';
 export default function CTASection({
   variant = 'light',
   title = 'Готовы начать сотрудничество?',
-  subtitle = 'Напишите нашему менеджеру в Telegram или сделайте расчёт стоимости доставки на нашем калькуляторе.',
+  subtitle = 'Напишите нашему менеджеру в Telegram или рассчитайте платёж на калькуляторе.',
 }: {
   variant?: 'light' | 'dark';
   title?: string;

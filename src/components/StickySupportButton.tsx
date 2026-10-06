@@ -15,7 +15,7 @@ export default function StickySupportButton() {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 animate-slide-up">
+    <div className="hidden md:flex fixed bottom-6 right-6 z-50 flex-col items-end gap-3 animate-slide-up">
       {expanded && (
         <div className="glass rounded-2xl p-5 shadow-2xl shadow-brand-500/20 max-w-xs animate-fade-in-up">
           <div className="flex items-start justify-between mb-3">
@@ -25,7 +25,7 @@ export default function StickySupportButton() {
               </div>
               <div>
                 <div className="font-display font-bold text-gray-900 text-sm">Поддержка FTS-Pay</div>
-                <div className="text-xs text-gray-500">Онлайн 24/7</div>
+                <div className="text-xs text-gray-500">Ответим по заявке</div>
               </div>
             </div>
             <button
@@ -36,7 +36,7 @@ export default function StickySupportButton() {
             </button>
           </div>
           <p className="text-sm text-gray-600 mb-4">
-            Напишите нам — рассчитаем платёж и ответим на все вопросы. Работаем круглосуточно.
+            Напишите нам — рассчитаем платёж и ответим на вопросы по вашему сценарию.
           </p>
           <button
             onClick={openManagerTelegram}

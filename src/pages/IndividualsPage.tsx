@@ -1,0 +1,16 @@
+import { Link } from 'react-router-dom';
+import { ArrowRight, CheckCircle2, MessageCircle, Wallet } from 'lucide-react';
+import { PAYMENT_TERMS } from '@/data/content';
+import { openManagerTelegram, openClientChatTelegram } from '@/lib/utils';
+import LeadForm from '@/components/LeadForm';
+
+export default function IndividualsPage() {
+  return <div className="pt-20">
+    <section className="relative py-16 sm:py-24 overflow-hidden"><div className="absolute inset-0 hero-mesh" /><div className="content-layer max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div className="grid lg:grid-cols-[1.1fr_.9fr] gap-10 items-center">
+      <div><span className="inline-flex glass-orange px-4 py-2 rounded-full text-sm font-semibold text-brand-700 mb-5">Для себя</span><h1 className="font-display font-extrabold text-4xl sm:text-5xl text-gray-900 leading-tight mb-5">Пополните Alipay или WeChat и оплатите покупки в Китае</h1><p className="text-lg text-gray-600 leading-relaxed mb-7">Рассчитаем сумму в рублях, подтвердим курс и поможем перевести юани продавцу или на ваш кошелёк.</p><div className="flex flex-col sm:flex-row gap-3"><Link to="/calculator" className="btn-primary">Рассчитать платёж <ArrowRight className="w-5 h-5" /></Link><button onClick={openManagerTelegram} className="btn-glass"><MessageCircle className="w-5 h-5 text-brand-500" /> Написать менеджеру</button></div></div>
+      <div className="glass-card p-6 sm:p-8"><LeadForm defaultService="Alipay / WeChat / продавец" title="Получить расчёт" /></div>
+    </div></div></section>
+    <section className="py-14 bg-brand-50/40"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div className="grid md:grid-cols-3 gap-5">{[['Alipay','Пополнение кошелька в юанях для покупок на китайских площадках.'],['WeChat Pay','Пополнение для расчётов в Китае и с партнёрами.'],['Продавец','Оплата китайскому продавцу по реквизитам или инвойсу.']].map(([title, text]) => <div key={title} className="glass-card p-6"><Wallet className="w-7 h-7 text-brand-600 mb-4" /><h2 className="font-display font-bold text-xl mb-2">{title}</h2><p className="text-sm text-gray-600">{text}</p></div>)}</div></div></section>
+    <section className="py-16"><div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8"><div className="grid md:grid-cols-2 gap-8"><div><h2 className="font-display font-bold text-3xl mb-5">Условия до оплаты</h2><ul className="space-y-4">{[`Минимум — ${PAYMENT_TERMS.minimumCny.toLocaleString('ru-RU')} CNY`, `Комиссия ${PAYMENT_TERMS.commissionPercent}% добавляется к сумме оплаты`, PAYMENT_TERMS.timing, PAYMENT_TERMS.rateNote].map((item) => <li key={item} className="flex gap-3 text-gray-700"><CheckCircle2 className="w-5 h-5 text-brand-600 shrink-0" />{item}</li>)}</ul></div><div className="glass-card p-7"><h2 className="font-display font-bold text-2xl mb-3">Есть вопрос по покупке?</h2><p className="text-gray-600 mb-5">Напишите менеджеру или присоединитесь к чату клиентов, чтобы уточнить сценарий оплаты.</p><div className="flex flex-col sm:flex-row gap-3"><button onClick={openManagerTelegram} className="btn-primary">Менеджер</button><button onClick={openClientChatTelegram} className="btn-glass">Чат клиентов</button></div></div></div></div></section>
+  </div>;
+}

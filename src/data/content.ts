@@ -1,13 +1,13 @@
 export const COMPANY = {
   name: 'FTS-Pay',
-  fullName: 'FTS-Pay — Платежи в Китай для бизнеса',
-  tagline: 'Платежи в Китай для бизнеса',
+  fullName: 'FTS-Pay — платежи в Китай',
+  tagline: 'Оплата покупок в Китае и пополнение Alipay / WeChat',
   description:
-    'Оплата поставщикам по инвойсу, пополнение Alipay и WeChat Pay, обмен рублей на юани. Переводим быстро, легально и по выгодному курсу.',
+    'Помогаем оплатить китайскому продавцу или пополнить кошелёк в юанях. Для бизнеса оплачиваем поставщиков по инвойсу.',
   phone: '+7 (929) 381-66-17',
   email: 'support@ftspay.cc',
   managerTelegram: 'https://t.me/obmen_CNY_support',
-  channelTelegram: 'https://t.me/obmen_CNY_support',
+  channelTelegram: 'https://t.me/+u7udOyZQOohkMDQy',
   clientChatTelegram: 'https://t.me/+u7udOyZQOohkMDQy',
   address: '195277, г. Санкт-Петербург, вн. тер. г. муниципальный округ Сампсониевское, Выборгская набережная, д. 43, литера А, пав. 406',
   ogrn: '1267800016142',
@@ -24,7 +24,15 @@ export const COMPANY = {
   minSum: 2500,
   minSumCurrency: 'юаней',
   commission: 1.5,
-  rate: 11.68,
+};
+
+export const PAYMENT_TERMS = {
+  minimumCny: 2500,
+  commissionPercent: 1.5,
+  commissionModel: 'added' as const,
+  indicativeRange: '30 000–100 000 ₽',
+  timing: 'Срок перевода подтверждаем с менеджером до оплаты.',
+  rateNote: 'Курс предварительный и фиксируется менеджером на момент заявки.',
 };
 
 export type ServiceId =
@@ -54,11 +62,11 @@ export const SERVICES: Service[] = [
     title: 'Оплата поставщикам в Китае',
     shortTitle: 'Оплата поставщикам',
     description:
-      'Оплачиваем товар вашему китайскому поставщику по инвойсу или реквизитам. Переводим юани напрямую — поставщик получает деньги в течение часа.',
+      'Оплачиваем китайскому поставщику по инвойсу или реквизитам. Срок перевода подтверждаем с менеджером до оплаты.',
     features: [
       'Оплата по инвойсу или реквизитам',
       'Перевод в юанях напрямую поставщику',
-      'Зачисление в течение часа',
+      'Срок зачисления подтверждаем до оплаты',
       'Подтверждение перевода и чек',
     ],
     icon: 'Receipt',
@@ -68,10 +76,10 @@ export const SERVICES: Service[] = [
     title: 'Пополнение Alipay',
     shortTitle: 'Пополнение Alipay',
     description:
-      'Пополняем ваш счёт Alipay в юанях. Удобно для покупок на 1688, Taobao, Tmall и других китайских площадках. Зачисление моментально.',
+      'Пополняем ваш счёт Alipay в юанях для покупок на китайских площадках. Срок зачисления подтверждаем до оплаты.',
     features: [
       'Пополнение баланса Alipay',
-      'Моментальное зачисление',
+      'Срок зачисления подтверждаем до оплаты',
       'Для покупок на 1688, Taobao, Tmall',
       'Минимальная сумма — 2 500 юаней',
     ],
@@ -128,7 +136,7 @@ export const SERVICES: Service[] = [
     features: [
       'Перевод на карты UnionPay',
       'Банки ICBC, BOC, ABC и другие',
-      'Зачисление в течение часа',
+      'Срок зачисления подтверждаем до оплаты',
       'Без серых схем',
     ],
     icon: 'CreditCard',
@@ -197,16 +205,16 @@ export interface ExchangeDirection {
   to: string;
   rate: number;
   commission: number;
-  minAmount: number;
+  minimumCny: number;
   icon: string;
 }
 
 export const EXCHANGE_DIRECTIONS: ExchangeDirection[] = [
-  { id: 'rub-cny', from: 'RUB', to: 'CNY', rate: 11.68, commission: 1.5, minAmount: 2500, icon: 'ArrowLeftRight' },
-  { id: 'cny-rub', from: 'CNY', to: 'RUB', rate: 0.083, commission: 1.5, minAmount: 2500, icon: 'ArrowLeftRight' },
-  { id: 'usdt-cny', from: 'USDT', to: 'CNY', rate: 7.15, commission: 2.0, minAmount: 2500, icon: 'Bitcoin' },
-  { id: 'rub-alipay', from: 'RUB', to: 'Alipay CNY', rate: 11.68, commission: 1.5, minAmount: 2500, icon: 'Wallet' },
-  { id: 'rub-wechat', from: 'RUB', to: 'WeChat CNY', rate: 11.68, commission: 1.5, minAmount: 2500, icon: 'MessageCircle' },
+  { id: 'rub-cny', from: 'RUB', to: 'CNY', rate: 0, commission: 1.5, minimumCny: 2500, icon: 'ArrowLeftRight' },
+  { id: 'cny-rub', from: 'CNY', to: 'RUB', rate: 0, commission: 1.5, minimumCny: 2500, icon: 'ArrowLeftRight' },
+  { id: 'usdt-cny', from: 'USDT', to: 'CNY', rate: 0, commission: 2.0, minimumCny: 2500, icon: 'Bitcoin' },
+  { id: 'rub-alipay', from: 'RUB', to: 'Alipay CNY', rate: 0, commission: 1.5, minimumCny: 2500, icon: 'Wallet' },
+  { id: 'rub-wechat', from: 'RUB', to: 'WeChat CNY', rate: 0, commission: 1.5, minimumCny: 2500, icon: 'MessageCircle' },
 ];
 
 export interface Review {

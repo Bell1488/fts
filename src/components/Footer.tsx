@@ -60,6 +60,8 @@ export default function Footer() {
               <li><Link to="/" className="text-gray-400 text-sm hover:text-brand-400 transition-colors">Главная</Link></li>
               <li><Link to="/services" className="text-gray-400 text-sm hover:text-brand-400 transition-colors">Услуги</Link></li>
               <li><Link to="/calculator" className="text-gray-400 text-sm hover:text-brand-400 transition-colors">Калькулятор</Link></li>
+              <li><Link to="/for-you" className="text-gray-400 text-sm hover:text-brand-400 transition-colors">Для себя</Link></li>
+              <li><Link to="/business" className="text-gray-400 text-sm hover:text-brand-400 transition-colors">Для бизнеса</Link></li>
               <li><Link to="/about" className="text-gray-400 text-sm hover:text-brand-400 transition-colors">О компании</Link></li>
               <li><Link to="/reviews" className="text-gray-400 text-sm hover:text-brand-400 transition-colors">Отзывы</Link></li>
               <li><Link to="/contacts" className="text-gray-400 text-sm hover:text-brand-400 transition-colors">Контакты</Link></li>

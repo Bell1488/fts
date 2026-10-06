@@ -9,6 +9,7 @@ const proxyUrl = process.env.SOCKS5H_URL;
 console.log('FTS-Pay config:', { port, hasBotToken: Boolean(botToken), hasChatId: Boolean(chatId), hasProxy: Boolean(proxyUrl) });
 const ratesCache = { value: null, fetchedAt: 0 };
 let botOffset = 0;
+const leadHits = new Map();
 
 function json(response, status, body) {
   response.writeHead(status, { 'content-type': 'application/json; charset=utf-8' });
@@ -16,13 +17,18 @@ function json(response, status, body) {
 }
 
 function formatMessage(data) {
+  const marketing = data.utm && typeof data.utm === 'object'
+    ? Object.entries(data.utm).map(([key, value]) => `${key}: ${value}`).join(', ')
+    : '';
   return [
     '<b>Новая заявка с сайта</b>',
     '',
-    `<b>Имя:</b> ${escapeHtml(data.name)}`,
+    `<b>Сумма:</b> ${escapeHtml(data.amount || 'Не указана')} ${escapeHtml(data.currency || '')}`,
+    `<b>Услуга:</b> ${escapeHtml(data.service || 'Не указана')}`,
     `<b>Компания:</b> ${escapeHtml(data.company || 'Не указана')}`,
     `<b>Контакт:</b> ${escapeHtml(data.contact)}`,
-    `<b>Сумма и направление:</b> ${escapeHtml(data.details || 'Не указаны')}`,
+    `<b>Комментарий:</b> ${escapeHtml(data.comment || data.details || 'Не указан')}`,
+    marketing ? `<b>Реклама:</b> ${escapeHtml(marketing)}` : '',
   ].join('\n');
 }
 
@@ -81,10 +87,20 @@ const server = http.createServer(async (req, res) => {
   if (req.method !== 'POST' || req.url !== '/api/lead') return json(res, 404, { error: 'Not found' });
 
   let raw = '';
-  for await (const chunk of req) raw += chunk;
+  for await (const chunk of req) {
+    raw += chunk;
+    if (raw.length > 100_000) return json(res, 413, { error: 'Слишком большой запрос' });
+  }
   try {
     const data = JSON.parse(raw);
-    if (!data.name || !data.contact) return json(res, 400, { error: 'Имя и контакт обязательны' });
+    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress || 'unknown';
+    const now = Date.now();
+    const recent = (leadHits.get(ip) || []).filter((time) => now - time < 60_000);
+    if (recent.length >= 5) return json(res, 429, { error: 'Слишком много заявок. Попробуйте позже.' });
+    recent.push(now);
+    leadHits.set(ip, recent);
+    if (data.honeypot) return json(res, 400, { error: 'Invalid request' });
+    if (!data.contact || !String(data.contact).trim()) return json(res, 400, { error: 'Контакт обязателен' });
     await sendToTelegram(data);
     return json(res, 200, { ok: true });
   } catch (error) {

@@ -7,6 +7,8 @@ const NAV_LINKS = [
   { to: '/', label: 'Главная' },
   { to: '/services', label: 'Услуги' },
   { to: '/calculator', label: 'Калькулятор' },
+  { to: '/for-you', label: 'Для себя' },
+  { to: '/business', label: 'Для бизнеса' },
   { to: '/about', label: 'О компании' },
   { to: '/reviews', label: 'Отзывы' },
   { to: '/contacts', label: 'Контакты' },
