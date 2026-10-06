@@ -8,6 +8,7 @@ export const COMPANY = {
   email: 'support@ftspay.cc',
   managerTelegram: 'https://t.me/obmen_CNY_support',
   channelTelegram: 'https://t.me/obmen_CNY_support',
+  clientChatTelegram: 'https://t.me/+_h-6cd7YiLI5ZDEy',
   address: '195277, г. Санкт-Петербург, вн. тер. г. муниципальный округ Сампсониевское, Выборгская набережная, д. 43, литера А, пав. 406',
   ogrn: '1267800016142',
   inn: '7802972268',

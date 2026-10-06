@@ -13,6 +13,11 @@ export function openChannelTelegram() {
   window.open(import.meta.env.VITE_CHANNEL_TELEGRAM_URL || COMPANY.channelTelegram, '_blank', 'noopener,noreferrer');
 }
 
+export function openClientChatTelegram() {
+  trackMetrikaGoal('telegram_client_chat_click');
+  window.open(COMPANY.clientChatTelegram, '_blank', 'noopener,noreferrer');
+}
+
 export function formatNumber(value: number, decimals: number = 0): string {
   return new Intl.NumberFormat('ru-RU', {
     minimumFractionDigits: decimals,

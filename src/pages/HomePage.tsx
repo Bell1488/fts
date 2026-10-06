@@ -6,8 +6,8 @@ import {
   Zap, Clock, Percent, TrendingUp, Layers, ShieldCheck,
   CheckCircle2, MessageSquare,
 } from 'lucide-react';
-import { SERVICES, STATS, PROCESS_STEPS, ADVANTAGES, REVIEWS, FAQ_ITEMS, COMPANY, EXCHANGE_DIRECTIONS } from '@/data/content';
-import { openManagerTelegram, openChannelTelegram, formatNumber, formatCurrency } from '@/lib/utils';
+import { SERVICES, STATS, PROCESS_STEPS, ADVANTAGES, REVIEWS, FAQ_ITEMS, EXCHANGE_DIRECTIONS } from '@/data/content';
+import { openManagerTelegram, openChannelTelegram, openClientChatTelegram, formatNumber } from '@/lib/utils';
 import CTASection from '@/components/CTASection';
 import ReviewCard from '@/components/ReviewCard';
 
@@ -135,6 +135,13 @@ export default function HomePage() {
                 <button onClick={openManagerTelegram} className="btn-primary text-base px-8 py-4">
                   <Send className="w-5 h-5" />
                   Написать менеджеру
+                </button>
+                <button
+                  onClick={openClientChatTelegram}
+                  className="btn-glass text-base px-8 py-4 border-brand-300/70 bg-brand-50/80 text-brand-800 hover:border-brand-500 hover:bg-brand-100"
+                >
+                  <MessageCircle className="w-5 h-5 text-brand-600" />
+                  Чат клиентов: живые отзывы и чеки выплат
                 </button>
                 <button onClick={openChannelTelegram} className="btn-glass text-base px-8 py-4">
                   <Star className="w-5 h-5 text-brand-500" />
