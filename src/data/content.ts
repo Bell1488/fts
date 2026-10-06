@@ -31,7 +31,6 @@ export const PAYMENT_TERMS = {
   minimumRub: 5000,
   commissionPercent: 1.5,
   commissionModel: 'added' as const,
-  indicativeRange: '30 000–100 000 ₽',
   timing: 'Срок перевода подтверждаем с менеджером до оплаты.',
   rateNote: 'Курс предварительный и фиксируется менеджером на момент заявки.',
 };
